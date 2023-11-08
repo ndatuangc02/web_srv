@@ -39,8 +39,12 @@ jobs:
           aws s3 sync ./web s3://test-asdasd123 --delete
 
       - name: Send file and restart nginx
-        uses: aws-actions/aws-ssm-send-command@v1
-        with:
-          instance-ids: i-0ad7c716b810106c0
-          document-name: AWS-RunShellScript
-          parameters: commands=["aws s3 cp s3:/test-asdasd123/ /var/www/html/", "sudo systemctl restart nginx"]
+        run: |
+          aws ssm send-command \
+          --document-name "AWS-RunShellScript" \
+          --instance-ids "i-0ad7c716b810106c0" \
+          --parameters commands=["aws s3 cp s3:/test-asdasd123/ /var/www/html/", "sudo systemctl restart nginx"]
+
+          
+          
+        
